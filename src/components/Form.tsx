@@ -1,21 +1,53 @@
-import React from 'react'
+
+import { useState, ChangeEvent, FormEvent } from 'react'
+import { Activity } from '../types'
 import { categories } from '../data/categories'
 
 
 export default function Form() {
 
+  const [Activity, setActivity] = useState <Activity>({
+    category:1,
+    name:'',
+    calories:0
+  })
+
+
+  const handleChange = (e:ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>) => {
+    const isNumberField = ['category', 'calories'].includes(e.target.id)
+    
+    setActivity({
+      ...Activity,
+      [e.target.id]: isNumberField ? +e.target.value : e.target.value
+    })
+  }
+
+
+  const isValidActivity = () =>{
+    const {name, calories } = Activity
+    return name !== '' && calories > 0
+  }
+
+  const handleSubmit=(e : FormEvent<HTMLFormElement> )=>{
+    e.preventDefault()
+
+    console.log('submit')
+  }
     
 
 
   return (
    <form 
    className='space-y-5 bg-white shadow p-10 rounded-lg'
+   onSubmit={handleSubmit}
    >
     <div className='grid grid-cols-1 gap-3'>
         <label htmlFor="category" className='font-bold'>Categoria: </label>
         <select 
         className='border border-slate-300 p-2 rounded-lg w-full bg-white' 
-        id=" category"
+        id="category"
+        value={Activity.category}
+        onChange={handleChange}
         >
           {categories.map(category => (
             <option 
@@ -29,12 +61,14 @@ export default function Form() {
     </div>
     
     <div className='grid grid-cols-1 gap-3'>
-        <label htmlFor=" activity" className='font-bold'>Actividad:</label>
+        <label htmlFor=" name" className='font-bold'>Actividad:</label>
         <input 
-        id='activity'
+        id='name'
         type='text'
         className='border borderslate-300 p-2 rounded-lg'
         placeholder='Ej. Comida, Juego de Naranja, Enssalada, Ejercicio, pesas, Bicicleta '
+        value={Activity.name}
+        onChange={handleChange}
          />
     </div>
 
@@ -45,13 +79,16 @@ export default function Form() {
         type='number'
         className='border borderslate-300 p-2 rounded-lg'
         placeholder='Calorias. ej. 300 o 500 '
+        value={Activity.calories}
+        onChange={handleChange}
          />
     </div>
 
     <input
      type="submit" 
-     className='bg-gray-800 hover:bg-gray-900 w-full p-2 font-bold uppercase text-white cursor-pointer'
-     value={'Guardar Comida o Guardar Ejercicio'}
+     className='bg-gray-800 hover:bg-gray-900 w-full p-2 font-bold uppercase text-white cursor-pointer disabled:opacity-10'
+     value={Activity.category === 1 ? 'Guardar Comida' : 'Guardar Ejercicio'}
+     disabled={!isValidActivity()}
      />
 
 

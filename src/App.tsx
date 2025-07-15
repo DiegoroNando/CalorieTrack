@@ -1,8 +1,11 @@
-
+import { useReducer } from 'react'
 import './App.css'
 import Form from './components/Form'
+import { activityReducer, initialState } from './reducers/activityReducer'
 
 function App() {
+
+  const [] = useReducer(activityReducer, initialState)
 
   return (
     <>
