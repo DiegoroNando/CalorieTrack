@@ -1,0 +1,22 @@
+import type { Activity } from "../types"
+
+export type ActivityAction =
+    {type: 'save-activity', payload: {newActivity : Activity}} 
+
+type ActivityState ={
+    activities: Activity[]
+}
+
+export const initialState : ActivityState ={
+    activities:[]
+}
+
+export const activityReducer = (
+    state: ActivityState = initialState,
+    action: ActivityAction 
+) => {
+    if(action.type === 'save-activity'){
+        //Manjea logica para actualizar state
+        
+    }
+}
