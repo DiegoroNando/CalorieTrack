@@ -1,16 +1,25 @@
 
-import { useState, ChangeEvent, FormEvent } from 'react'
+import { useState, ChangeEvent, FormEvent, Dispatch } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 import { Activity } from '../types'
 import { categories } from '../data/categories'
+import type { ActivityAction } from '../reducers/activityReducer'
 
+  type FormProps ={
+    dispatch: Dispatch<ActivityAction>
+      }
 
-export default function Form() {
-
-  const [Activity, setActivity] = useState <Activity>({
+const initialState: Activity ={
+    id: uuidv4(),
     category:1,
     name:'',
     calories:0
-  })
+}
+
+export default function Form({dispatch}: FormProps) {
+
+
+  const [Activity, setActivity] = useState <Activity>(initialState)
 
 
   const handleChange = (e:ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>) => {
@@ -30,7 +39,12 @@ export default function Form() {
 
   const handleSubmit=(e : FormEvent<HTMLFormElement> )=>{
     e.preventDefault()
- 
+
+    dispatch({type: 'save-activity', 'payload': {newActivity:Activity}})
+    setActivity({
+      ...initialState,
+      id: uuidv4()
+    })
   }
     
 
